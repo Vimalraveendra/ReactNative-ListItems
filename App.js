@@ -17,6 +17,7 @@ FontIcon.loadFont();
 
 import DataList from './Components/DataList/DataList';
 import ContactList from './Components/ContactList/ContactList';
+import SearchBox from './Components/SearchBox/SearchBox';
 
 class App extends React.Component {
   state = {
@@ -115,16 +116,7 @@ class App extends React.Component {
             borderColor: 'green',
           }}
         />
-        <View style={styles.searchBar}>
-          <TextInput
-            placeholder="Search Here..."
-            style={styles.search}
-            lightTheme
-            round
-            onChangeText={this.handleSearch}
-          />
-          <Icon name="search" size={24} style={styles.icon} />
-        </View>
+        <SearchBox handleSearch={this.handleSearch} />
         <FlatList
           data={this.filteredList()}
           keyExtractor={(item) => item.id.toString()}
@@ -151,22 +143,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     alignSelf: 'center',
     marginTop: 10,
-  },
-  searchBar: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#eee',
-    height: 40,
-    width: '100%',
-    borderRadius: 25,
-    paddingHorizontal: 20,
-  },
-  search: {
-    width: '90%',
-    fontSize: 18,
-    fontWeight: '400',
   },
 });
 
