@@ -25,15 +25,19 @@ class App extends React.Component {
   };
   updateIndex = (selectedIndex) => {
     if (selectedIndex === 2) {
-      this.setState({selectedIndex, listItems: []});
+      this.setState({selectedIndex});
+      this.deleteAll();
     } else if (selectedIndex === 1) {
       this.setState({selectedIndex});
       this.selectAll();
     } else {
       this.setState({selectedIndex});
+      this.deleteSelected();
     }
   };
-
+  deleteAll = () => {
+    this.setState({listItems: []});
+  };
   selectAll = () => {
     let result = this.state.listItems.map((item) =>
       !this.state.selectedList ? item.id : [],
@@ -43,6 +47,33 @@ class App extends React.Component {
       deletedList: result,
       selectedList: !this.state.selectedList,
     });
+  };
+
+  deleteSelected = () => {
+    const {deletedList, listItems} = this.state;
+    let helperArray = deletedList;
+    let helperArray2 = listItems;
+    helperArray2 = helperArray2.filter(
+      (item, index) => item.id !== helperArray[index],
+    );
+
+    this.setState({listItems: helperArray2, deletedList: []});
+  };
+
+  selectIndividualContact = (id) => {
+    const {deletedList, listItems} = this.state;
+    let helperArray = deletedList;
+    if (helperArray.includes(id)) {
+      this.setState({selectedList: false});
+      helperArray = helperArray.filter((item) => item !== id);
+    } else {
+      // helperArray.push(id)
+      helperArray = [...helperArray, id];
+      if (helperArray.length === listItems.length) {
+        this.setState({selectedList: true});
+      }
+    }
+    this.setState({deletedList: helperArray});
   };
 
   delItem = (id) => {
@@ -55,7 +86,11 @@ class App extends React.Component {
   renderItem = ({item}) => {
     return (
       <ListItem bottomDivider>
-        <CheckBox checked={this.state.deletedList.includes(item.id)} />
+        <CheckBox
+          onPress={() => this.selectIndividualContact(item.id)}
+          checked={this.state.deletedList.includes(item.id)}
+        />
+
         <Avatar rounded source={{uri: item.avatar_url}} />
         <ListItem.Content>
           <ListItem.Title>{item.name}</ListItem.Title>
@@ -81,7 +116,7 @@ class App extends React.Component {
     const {selectedIndex} = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Flat List Items</Text>
+        <Text style={styles.title}>Contact List</Text>
         <ButtonGroup
           onPress={this.updateIndex}
           selectedIndex={selectedIndex}
