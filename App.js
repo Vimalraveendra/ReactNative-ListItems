@@ -5,23 +5,23 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
   View,
   TextInput,
 } from 'react-native';
-import {ButtonGroup, ListItem, Avatar, CheckBox} from 'react-native-elements';
+import {ButtonGroup} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 
 Icon.loadFont();
 FontIcon.loadFont();
 
-import DatList from './Components/DataList/DataList';
+import DataList from './Components/DataList/DataList';
+import ContactList from './Components/ContactList/ContactList';
 
 class App extends React.Component {
   state = {
     selectedIndex: 0,
-    listItems: DatList,
+    listItems: DataList,
     deletedList: [],
     selectedList: false,
     text: '',
@@ -96,31 +96,6 @@ class App extends React.Component {
     });
   };
 
-  renderItem = ({item}) => {
-    console.log('ite', item);
-    return (
-      <ListItem bottomDivider>
-        <CheckBox
-          onPress={() => this.selectIndividualContact(item.id)}
-          checked={this.state.deletedList.includes(item.id)}
-        />
-
-        <Avatar rounded source={{uri: item.avatar_url}} />
-        <ListItem.Content>
-          <ListItem.Title>{item.name}</ListItem.Title>
-          <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
-        </ListItem.Content>
-        <TouchableOpacity
-          onPress={() => {
-            this.delItem(item.id);
-          }}>
-          <FontIcon name="trash-o" color="red" size={25} />
-        </TouchableOpacity>
-        <Icon name="chevron-right" color="#eee" size={30} />
-      </ListItem>
-    );
-  };
-
   render() {
     const buttons = [
       'Delete Selected',
@@ -153,7 +128,14 @@ class App extends React.Component {
         <FlatList
           data={this.filteredList()}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={this.renderItem}
+          renderItem={({item}) => (
+            <ContactList
+              item={item}
+              deletedList={this.state.deletedList}
+              delItem={this.delItem}
+              selectIndividualContact={this.selectIndividualContact}
+            />
+          )}
         />
       </SafeAreaView>
     );
