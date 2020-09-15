@@ -90,7 +90,14 @@ class App extends React.Component {
     this.setState({text});
   };
 
+  filteredList = () => {
+    return this.state.listItems.filter((item) => {
+      return item.name.toLowerCase().includes(this.state.text.toLowerCase());
+    });
+  };
+
   renderItem = ({item}) => {
+    console.log('ite', item);
     return (
       <ListItem bottomDivider>
         <CheckBox
@@ -144,7 +151,7 @@ class App extends React.Component {
           <Icon name="search" size={24} style={styles.icon} />
         </View>
         <FlatList
-          data={this.state.listItems}
+          data={this.filteredList()}
           keyExtractor={(item) => item.id.toString()}
           renderItem={this.renderItem}
         />
