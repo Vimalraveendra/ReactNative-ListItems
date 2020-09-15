@@ -6,6 +6,8 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  View,
+  TextInput,
 } from 'react-native';
 import {ButtonGroup, ListItem, Avatar, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
@@ -22,6 +24,7 @@ class App extends React.Component {
     listItems: DatList,
     deletedList: [],
     selectedList: false,
+    text: '',
   };
   updateIndex = (selectedIndex) => {
     if (selectedIndex === 2) {
@@ -83,6 +86,10 @@ class App extends React.Component {
     this.setState({listItems: helperArray});
   };
 
+  handleSearch = (text) => {
+    this.setState({text});
+  };
+
   renderItem = ({item}) => {
     return (
       <ListItem bottomDivider>
@@ -126,6 +133,16 @@ class App extends React.Component {
             borderColor: 'green',
           }}
         />
+        <View style={styles.searchBar}>
+          <TextInput
+            placeholder="Search Here..."
+            style={styles.search}
+            lightTheme
+            round
+            onChangeText={this.handleSearch}
+          />
+          <Icon name="search" size={24} style={styles.icon} />
+        </View>
         <FlatList
           data={this.state.listItems}
           keyExtractor={(item) => item.id.toString()}
@@ -145,6 +162,22 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     alignSelf: 'center',
     marginTop: 10,
+  },
+  searchBar: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#eee',
+    height: 40,
+    width: '100%',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+  },
+  search: {
+    width: '90%',
+    fontSize: 18,
+    fontWeight: '400',
   },
 });
 
